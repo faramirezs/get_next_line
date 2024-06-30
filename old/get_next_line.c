@@ -2,70 +2,84 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "get_next_line.h"
 
-
-/* char * _set_line (char *appended_string){
-	// "appended_string" variable that will hold the appended string
-	// Variable that will hold the new line character
-	char * nl_char;
-	// Variable that will hold the line
-	char * line;
-
-	nl_char = malloc(1);
-	*nl_char = '\0';
-	line = malloc(1);
-	*line = '\0';
-
-	if (nl_char == NULL | line == NULL) {
-		printf("Memory allocation at _set_line failed\n");
-		return(NULL);
-	}
-	else if (ft_strchr(appended_string, '\n') != NULL)
-	{
-		nl_char = ft_strchr(appended_string, '\n');
-		line = ft_substr(appended_string, 0, nl_char - appended_string);
-		printf("Line:%s\n", line);
-		return(line);
-	}
-	else
-		return(0);
-} */
-
-void    print_newline_helper(char *buffer)
+size_t	ft_strlen(char const *s)
 {
+	size_t	i;
 
-    while (*buffer &&  *buffer != '\0')
-    {
-        if (*buffer == '\n')
-        {
-            *buffer= '\\';
-        }
-        printf("%c",*buffer);
-        buffer++;
-    }
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-char *read_file (int fd) {
-	int r_bytes;
-	char * buffer;
-	static int count = 1;
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*tmp;
+	int	i;
+	int	j;
 
-	printf("ft_calloc#[%d]---", count++);
-	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (buffer == NULL) {
-		printf("Memory allocation failed\n");
-		return(NULL);
+	i = 0;
+	j = 0;
+	tmp = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!tmp)
+		return (NULL);
+	while (s1[i])
+	{
+		tmp[i] = s1[i];
+		i++;
 	}
-	r_bytes = read(fd, buffer, BUFFER_SIZE);
-	print_newline_helper(buffer);
-	if (r_bytes <= 0)
-		return(free(buffer), NULL);
-	return(buffer);
+	while (s2[j])
+	{
+		tmp[i] = s2[j];
+		i++;
+		j++;
+	}
+	tmp[i] = '\0';
+	return (tmp);
 }
 
+char	*ft_strchr(const char *s, int c)
+{
+	char	char_c;
+	unsigned int	i;
 
-/* char * _fill_line_buffer (int fd){
+	char_c = (char) c;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == char_c)
+			return ((char *) &s[i]);
+		i++;
+	}
+	if (s[i] == char_c)
+		return ((char *) &s[i]);
+	return (NULL);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*tmp;
+	size_t	i;
+	size_t	len_s;
+
+	i = 0;
+	len_s	= ft_strlen(s);
+	tmp = (char *)malloc(len + 1);
+	if (!tmp || !s)
+		return (NULL);
+	if (start > len_s)
+		return (NULL);
+	while (i < len && i < len_s - start && len_s > start)
+	{
+		tmp[i] = s[start + i];
+		i++;
+	}
+	tmp[i] = '\0';
+	return (tmp);
+}
+
+char * _fill_line_buffer (int fd){
 
 	ssize_t rd;
 	size_t rbyte;
@@ -115,11 +129,21 @@ char *read_file (int fd) {
 				printf("ft_strjoin failed\n");
 				return(NULL);
 			}
+			if (ft_strchr(temp, '\n'))
+			{
+				char	*substr;
+				char	*substr_nl;
+				int		substr_len;
+				substr_nl = ft_strchr(temp, '\n');
+				substr_len = substr_nl - temp;
+				substr = ft_substr(temp, 0, (size_t)substr_len);
+				printf("Sub string: %s\n", substr);
+			}
+
 			// Now we need to free the old memory that left_c is pointing to
 			free(left_c);
 			// And update left_c to point to the new memory
 			left_c = temp;
-			_set_line (left_c);
 			if (left_c == NULL) {
 				printf("Memory allocation failed\n");
 				return(NULL);
@@ -139,24 +163,24 @@ char *read_file (int fd) {
 	free(buffer);
 	free(left_c);
 	return(0);
-} */
+}
 
 char * get_next_line(int fd) {
-
-
-	 char *gnl_buffer;
-
-
-	if(fd == -1)
-	{
+	if(fd == -1){
 		printf("Failed to open file\n");
 		return(NULL);
 	}
-	else
-	{
-		printf("File opened with fd = %d\n", fd);
-		gnl_buffer= read_file(fd);
- 		return (gnl_buffer);
+	else {
+		 printf("File opened with fd = %d\n", fd);
+		 return(_fill_line_buffer(fd));
 	}
+}
+
+int main() {
+
+	int fd;
+	fd = open("file.txt", O_RDONLY);
+	get_next_line(fd);
+
 }
 
