@@ -39,45 +39,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (tmp);
 }
 
-char	*ft_strchr(const char *s, int c)
-{
-	char	char_c;
-	unsigned int	i;
-
-	char_c = (char) c;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == char_c)
-			return ((char *) &s[i]);
-		i++;
-	}
-	if (s[i] == char_c)
-		return ((char *) &s[i]);
-	return (NULL);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*tmp;
-	size_t	i;
-	size_t	len_s;
-
-	i = 0;
-	len_s	= ft_strlen(s);
-	tmp = (char *)malloc(len + 1);
-	if (!tmp || !s)
-		return (NULL);
-	if (start > len_s)
-		return (NULL);
-	while (i < len && i < len_s - start && len_s > start)
-	{
-		tmp[i] = s[start + i];
-		i++;
-	}
-	tmp[i] = '\0';
-	return (tmp);
-}
 
 char * _fill_line_buffer (int fd){
 
@@ -129,17 +90,6 @@ char * _fill_line_buffer (int fd){
 				printf("ft_strjoin failed\n");
 				return(NULL);
 			}
-			if (ft_strchr(temp, '\n'))
-			{
-				char	*substr;
-				char	*substr_nl;
-				int		substr_len;
-				substr_nl = ft_strchr(temp, '\n');
-				substr_len = substr_nl - temp;
-				substr = ft_substr(temp, 0, (size_t)substr_len);
-				printf("Sub string: %s\n", substr);
-			}
-
 			// Now we need to free the old memory that left_c is pointing to
 			free(left_c);
 			// And update left_c to point to the new memory
