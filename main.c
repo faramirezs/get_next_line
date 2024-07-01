@@ -16,7 +16,7 @@ int main(void)
 		printf("Error opening file");
 		return (1);
 	}
-	while (1)
+	while (count < 2)
 	{
 		line = get_next_line(fd);
 		if (line == NULL)

@@ -5,63 +5,118 @@
 #include "get_next_line.h"
 
 
-/* char * _set_line (char *appended_string){
-	// "appended_string" variable that will hold the appended string
-	// Variable that will hold the new line character
-	char * nl_char;
-	// Variable that will hold the line
-	char * line;
+char *append_buffer (char *big_buffer, char *b2)
+{
+	char *temp;
 
-	nl_char = malloc(1);
-	*nl_char = '\0';
-	line = malloc(1);
-	*line = '\0';
-
-	if (nl_char == NULL | line == NULL) {
-		printf("Memory allocation at _set_line failed\n");
+	temp = ft_strjoin(big_buffer, b2);
+	if (temp == NULL)
+	{
+		printf("ft_strjoin failed\n");
 		return(NULL);
 	}
-	else if (ft_strchr(appended_string, '\n') != NULL)
+	free(big_buffer);
+	return(temp);
+}
+
+char *extract_line (char * big_buffer)
+{
+	char * nl_char;
+	char * line;
+
+	nl_char = ft_calloc(1, sizeof(char));
+	line = ft_calloc(1, sizeof(char));
+
+	if (nl_char == NULL | line == NULL) {
+		printf("Memory allocation failed at extract_line()\n");
+		return(NULL);
+	}
+	else if (ft_strchr(big_buffer, '\n') != NULL)
 	{
-		nl_char = ft_strchr(appended_string, '\n');
-		line = ft_substr(appended_string, 0, nl_char - appended_string);
+		nl_char = ft_strchr(big_buffer, '\n');
+		line = ft_substr(big_buffer, 0, nl_char - big_buffer);
 		printf("Line:%s\n", line);
 		return(line);
 	}
 	else
+	{
+		free(line);
+		free(nl_char);
 		return(0);
-} */
+	}
 
-void    print_newline_helper(char *buffer)
-{
-
-    while (*buffer &&  *buffer != '\0')
-    {
-        if (*buffer == '\n')
-        {
-            *buffer= '\\';
-        }
-        printf("%c",*buffer);
-        buffer++;
-    }
 }
 
-char *read_file (int fd) {
+char *obtain_remaining (char *big_buffer, char *line)
+{
+	big_buffer = ft_substr(big_buffer, ft_strlen(line),ft_strlen(big_buffer));
+	return (big_buffer);
+}
+
+char *read_file (char *big_buffer, int fd) {
 	int r_bytes;
 	char * buffer;
-	static int count = 1;
 
-	printf("ft_calloc#[%d]---", count++);
 	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (buffer == NULL) {
 		printf("Memory allocation failed\n");
 		return(NULL);
 	}
-	r_bytes = read(fd, buffer, BUFFER_SIZE);
-	print_newline_helper(buffer);
-	if (r_bytes <= 0)
-		return(free(buffer), NULL);
-	return(buffer);
+	r_bytes = 1;
+	while(r_bytes > 0){
+		r_bytes = read(fd, buffer, BUFFER_SIZE);
+		if (r_bytes == -1)
+		{
+			printf("Read error");
+			return (free(buffer), NULL);
+		}
+		else if (r_bytes == 0)
+		{
+			printf("End of file");
+			close(fd);
+			free(buffer);
+			return(0);
+		}
+		buffer[r_bytes] = '\0';
+		big_buffer = append_buffer(big_buffer, buffer);
+		if (ft_strchr(big_buffer, '\n'))
+			break;
+		}
+	printf("Buffer: %s\n", buffer);
+	printf("Big Buffer: %s\n", big_buffer);
+
+	free(buffer);
+	return(big_buffer);
+	}
+
+
+
+char * get_next_line(int fd) {
+
+	static char	*big_buffer;
+	char		*line;
+
+
+	if(fd < 0 || BUFFER_SIZE <= 0 )
+	{
+		printf("Failed to open file or BUFFER_SIZE is too small\n");
+		return(NULL);
+	}
+	if (!big_buffer)
+	{
+		big_buffer = ft_calloc(1, sizeof(char));
+	}
+	if (!ft_strchr(big_buffer, '\n'))
+	{
+		big_buffer = read_file(big_buffer, fd);
+	}
+	if (!big_buffer)
+	{
+		return(free(big_buffer), NULL);
+	}
+	line = extract_line(big_buffer);
+	big_buffer = obtain_remaining(big_buffer, line);
+ 	return (line);
 }
 
 
@@ -141,22 +196,5 @@ char *read_file (int fd) {
 	return(0);
 } */
 
-char * get_next_line(int fd) {
 
-
-	 char *gnl_buffer;
-
-
-	if(fd == -1)
-	{
-		printf("Failed to open file\n");
-		return(NULL);
-	}
-	else
-	{
-		printf("File opened with fd = %d\n", fd);
-		gnl_buffer= read_file(fd);
- 		return (gnl_buffer);
-	}
-}
 
