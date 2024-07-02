@@ -1,7 +1,7 @@
 #include <stddef.h>
 
 #	ifndef BUFFER_SIZE
-#	define BUFFER_SIZE 3
+#	define BUFFER_SIZE 5
 #	endif
 
 int		ft_strcmp(const char *str1, const char *str2);

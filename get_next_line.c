@@ -44,8 +44,8 @@ char *extract_line (char * big_buffer)
 		nl_char = ft_strchr(big_buffer, '\n');
 		line = ft_substr(big_buffer, 0, nl_char - big_buffer);
 		//printf("Line from extract_line():%s\n", line);
-		//free(nl_char);
-		//nl_char = NULL;
+		free(nl_char);
+		nl_char = NULL;
 		return(line);
 	}
 	else
@@ -60,10 +60,10 @@ char *extract_line (char * big_buffer)
 }
 
 char *obtain_remaining (char *big_buffer, char *line){
-
+	//printf("Obtain remaining 2\n");
 	if (ft_strcmp(big_buffer, line)==0)
 	{
-		//printf("big_buffer and line are equal: big_buffer:%s and line: %s\n", big_buffer, line);
+		printf("big_buffer and line are equal: big_buffer:%s and line: %s\n", big_buffer, line);
 		free(big_buffer);
 		//printf("Return equal cero from obtain_remaining");
         return(0);
@@ -144,6 +144,7 @@ char * get_next_line(int fd) {
 		return(free(big_buffer), NULL);
 	}
 	line = extract_line(big_buffer);
+	//printf("Obtain remaining 1\n");
 	big_buffer = obtain_remaining(big_buffer, line);
  	return (line);
 }

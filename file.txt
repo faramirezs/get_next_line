@@ -1,12 +1,1 @@
-Hola este es un file
-Tiene varias lineas
-Y tenemos que leerlo
-Hola este es un file
-Tiene varias lineas
-Y tenemos que leerlo
-Hola este es un file
-Tiene varias lineas
-Y tenemos que leerlo
-Hola este es un file
-Tiene varias lineas
-Y tenemos que leerlo
+Hola
