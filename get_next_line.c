@@ -61,6 +61,8 @@ char *extract_line (char * big_buffer)
 
 char *obtain_remaining (char *big_buffer, char *line){
 	//printf("Obtain remaining 2\n");
+	printf("big_buffer and line comparison result is:%i\n", ft_strcmp(big_buffer, line));
+	printf("big_buffer:%s and line: %s\n", big_buffer, line);
 	if (ft_strcmp(big_buffer, line)==0)
 	{
 		printf("big_buffer and line are equal: big_buffer:%s and line: %s\n", big_buffer, line);
