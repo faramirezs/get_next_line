@@ -4,6 +4,16 @@
 #include <stdlib.h>
 #include "get_next_line.h"
 
+int	ft_strcmp(const char *str1, const char *str2)
+{
+	while (*str1 && (*str1 == *str2))
+	{
+		str1++;
+		str2++;
+	}
+	return (*(unsigned char *)str1 - *(unsigned char *)str2);
+}
+
 size_t	ft_strlen(char const *s)
 {
 	size_t	i;

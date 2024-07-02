@@ -1,7 +1,10 @@
+#include <stddef.h>
+
 #	ifndef BUFFER_SIZE
 #	define BUFFER_SIZE 3
 #	endif
 
+int		ft_strcmp(const char *str1, const char *str2);
 size_t	ft_strlen(char const *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

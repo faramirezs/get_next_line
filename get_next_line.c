@@ -23,34 +23,57 @@ char *extract_line (char * big_buffer)
 {
 	char * nl_char;
 	char * line;
+/*
+	int	i;
+
+	i = 0;
+	fprintf(stderr, "big_buffer: %s\n", big_buffer);
+	while(big_buffer[i] != '\n' && big_buffer[i] != '\0')
+		i++;
+	fprintf(stderr, "i: %i\n", i); */
 
 	nl_char = ft_calloc(1, sizeof(char));
 	line = ft_calloc(1, sizeof(char));
 
-	if (nl_char == NULL | line == NULL) {
-		printf("Memory allocation failed at extract_line()\n");
-		return(NULL);
+	 if (nl_char == NULL || line == NULL) {
+	 	printf("Memory allocation failed at extract_line()\n");
+	 	return(NULL);
 	}
 	else if (ft_strchr(big_buffer, '\n') != NULL)
 	{
 		nl_char = ft_strchr(big_buffer, '\n');
 		line = ft_substr(big_buffer, 0, nl_char - big_buffer);
-		printf("Line:%s\n", line);
+		//printf("Line from extract_line():%s\n", line);
+		//free(nl_char);
+		//nl_char = NULL;
 		return(line);
 	}
 	else
 	{
+		// if(line)
 		free(line);
 		free(nl_char);
+
 		return(0);
 	}
 
 }
 
-char *obtain_remaining (char *big_buffer, char *line)
-{
-	big_buffer = ft_substr(big_buffer, ft_strlen(line),ft_strlen(big_buffer));
-	return (big_buffer);
+char *obtain_remaining (char *big_buffer, char *line){
+
+	if (ft_strcmp(big_buffer, line)==0)
+	{
+		//printf("big_buffer and line are equal: big_buffer:%s and line: %s\n", big_buffer, line);
+		free(big_buffer);
+		//printf("Return equal cero from obtain_remaining");
+        return(0);
+    }
+    else
+    {
+        big_buffer = ft_substr(big_buffer, ft_strlen(line) + 1, ft_strlen(big_buffer));
+        //printf("Remaining after removing line: %s\n", big_buffer);
+        return(big_buffer);
+    }
 }
 
 char *read_file (char *big_buffer, int fd) {
@@ -72,19 +95,25 @@ char *read_file (char *big_buffer, int fd) {
 		}
 		else if (r_bytes == 0)
 		{
-			printf("End of file");
+			printf("End of file!\n");
 			close(fd);
+			free(big_buffer);
 			free(buffer);
-			return(0);
+			return (0);
+			//break;
 		}
+		// Is this null terminated str really neccesary, it is not enough with the callocated from the above?
+		//fprintf(stderr, "I'm here after break\n");
 		buffer[r_bytes] = '\0';
 		big_buffer = append_buffer(big_buffer, buffer);
+		//printf("big_buffer inside read loop is: %s\n", big_buffer);
 		if (ft_strchr(big_buffer, '\n'))
+		{
+			//printf("nl found and loop broke in read_file()\n");
 			break;
 		}
-	printf("Buffer: %s\n", buffer);
-	printf("Big Buffer: %s\n", big_buffer);
-
+	}
+	//printf("Big Buffer outside loop is: %s\n", big_buffer);
 	free(buffer);
 	return(big_buffer);
 	}
@@ -97,7 +126,7 @@ char * get_next_line(int fd) {
 	char		*line;
 
 
-	if(fd < 0 || BUFFER_SIZE <= 0 )
+	if(fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0 )
 	{
 		printf("Failed to open file or BUFFER_SIZE is too small\n");
 		return(NULL);
@@ -118,83 +147,6 @@ char * get_next_line(int fd) {
 	big_buffer = obtain_remaining(big_buffer, line);
  	return (line);
 }
-
-
-/* char * _fill_line_buffer (int fd){
-
-	ssize_t rd;
-	size_t rbyte;
-	size_t size_of_buffer;
-	char * buffer;
-	char * left_c;
-	char * temp;
-
-	rbyte = 5;
-	rd = 1;
-	buffer = malloc(rbyte);
-	size_of_buffer = rbyte;
-	left_c = malloc(1);
-	*left_c = '\0';
-
-
-	if (buffer == NULL | left_c == NULL) {
-		printf("Memory allocation failed\n");
-		return(NULL);
-	}
-
-	if (size_of_buffer < rbyte) {
-		printf("Buffer overflow\n");
-		return(NULL);
-	}
-
-	while (rd > 0){
-		rd = read(fd, buffer, rbyte);
-		if (rd == -1){
-			printf("Read error");
-			return(NULL);
-		}
-		else if (rd == 0)
-		{
-			printf("Final: %s\n", left_c);
-			printf("End of file");
-			close(fd);
-			free(buffer);
-			free(left_c);
-			return(0);
-		}
-		else {
-			buffer[rd] = '\0';
-			// ft_strjoin allocates new memory and creates a new string
-			temp = ft_strjoin(left_c, buffer);
-			if (temp == NULL) {
-				printf("ft_strjoin failed\n");
-				return(NULL);
-			}
-			// Now we need to free the old memory that left_c is pointing to
-			free(left_c);
-			// And update left_c to point to the new memory
-			left_c = temp;
-			_set_line (left_c);
-			if (left_c == NULL) {
-				printf("Memory allocation failed\n");
-				return(NULL);
-			}
-			size_of_buffer = size_of_buffer + rbyte;
-			if (size_of_buffer < rbyte) {
-				printf("Buffer overflow\n");
-				return(NULL);
-			}
-		}
-		printf("Buffer: %s\n", buffer);
-		printf("Append: %s\n", left_c);
-	}
-
-	printf("Final: %s\n", left_c);
-	close(fd);
-	free(buffer);
-	free(left_c);
-	return(0);
-} */
 
 
 
