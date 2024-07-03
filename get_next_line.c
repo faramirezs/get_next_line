@@ -66,9 +66,13 @@ char *extract_line (char * big_buffer)
 }
 
 char *obtain_remaining (char *big_buffer, char *line){
-	//printf("Obtain remaining 2\n");
+
+/* 	if (big_buffer && line)
+	{
+		printf("si big_buffer:%s and si line: %s\n", big_buffer, line);
+	}
 	printf("big_buffer and line comparison result is:%i\n", ft_strcmp(big_buffer, line));
-	printf("big_buffer:%s and line: %s\n", big_buffer, line);
+	printf("big_buffer:%s and line:%s\n", big_buffer, line); */
 	if (ft_strcmp(big_buffer, line)==0)
 	{
 		printf("big_buffer and line are equal: big_buffer:%s and line: %s\n", big_buffer, line);
@@ -79,7 +83,7 @@ char *obtain_remaining (char *big_buffer, char *line){
     else
     {
         big_buffer = ft_substr(big_buffer, ft_strlen(line) + 1, ft_strlen(big_buffer));
-        //printf("Remaining after removing line: %s\n", big_buffer);
+        printf("Remaining after removing line, this is big_buffer: %s\n", big_buffer);
         return(big_buffer);
     }
 }
