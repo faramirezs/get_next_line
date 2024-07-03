@@ -16,6 +16,7 @@ char *append_buffer (char *big_buffer, char *b2)
 		return(NULL);
 	}
 	free(big_buffer);
+	// Este free permite que big_buffer pueda ser reasignado a temp
 	return(temp);
 }
 
@@ -32,31 +33,36 @@ char *extract_line (char * big_buffer)
 		i++;
 	fprintf(stderr, "i: %i\n", i); */
 
-	nl_char = ft_calloc(1, sizeof(char));
+	//nl_char = ft_calloc(1, sizeof(char));
 	line = ft_calloc(1, sizeof(char));
-
-	 if (nl_char == NULL || line == NULL) {
+	if (line == NULL)
+	{
 	 	printf("Memory allocation failed at extract_line()\n");
-	 	return(NULL);
+		return(NULL);
 	}
 	else if (ft_strchr(big_buffer, '\n') != NULL)
 	{
 		nl_char = ft_strchr(big_buffer, '\n');
+		free(line);
 		line = ft_substr(big_buffer, 0, nl_char - big_buffer);
-		//printf("Line from extract_line():%s\n", line);
-		free(nl_char);
-		nl_char = NULL;
-		return(line);
+		if (line == NULL)
+		{
+	 		printf("Memory allocation failed at extract_line()\n");
+	 		return(NULL);
+			//printf("Line from extract_line():%s\n", line);
+			//free(nl_char);
+			//nl_char = NULL;
+		}
 	}
 	else
 	{
 		// if(line)
 		free(line);
-		free(nl_char);
-
-		return(0);
+		//free(nl_char);
+		// Si no hay nl en big_buffer
+		return(NULL);
 	}
-
+	return(line);
 }
 
 char *obtain_remaining (char *big_buffer, char *line){
@@ -107,6 +113,7 @@ char *read_file (char *big_buffer, int fd) {
 		// Is this null terminated str really neccesary, it is not enough with the callocated from the above?
 		//fprintf(stderr, "I'm here after break\n");
 		buffer[r_bytes] = '\0';
+		// Antes del return de Append big_buffer queda liberado y asignado al malloc de strjoin
 		big_buffer = append_buffer(big_buffer, buffer);
 		//printf("big_buffer inside read loop is: %s\n", big_buffer);
 		if (ft_strchr(big_buffer, '\n'))
@@ -150,6 +157,3 @@ char * get_next_line(int fd) {
 	big_buffer = obtain_remaining(big_buffer, line);
  	return (line);
 }
-
-
-
