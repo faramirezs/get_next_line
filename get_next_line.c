@@ -73,15 +73,19 @@ char *obtain_remaining (char *big_buffer, char *line){
 	}
 	printf("big_buffer and line comparison result is:%i\n", ft_strcmp(big_buffer, line));
 	printf("big_buffer:%s and line:%s\n", big_buffer, line); */
-	if (ft_strcmp(big_buffer, line)==0)
+/* 	if (ft_strcmp(big_buffer, line)==0)
 	{
 		printf("big_buffer and line are equal: big_buffer:%s and line: %s\n", big_buffer, line);
 		free(big_buffer);
 		//printf("Return equal cero from obtain_remaining");
         return(0);
-    }
-    else
+    } */
+    if (ft_strlen(line) == ft_strlen(big_buffer))
     {
+		return(NULL);
+	}
+	else
+	{
         big_buffer = ft_substr(big_buffer, ft_strlen(line) + 1, ft_strlen(big_buffer));
         printf("Remaining after removing line, this is big_buffer: %s\n", big_buffer);
         return(big_buffer);

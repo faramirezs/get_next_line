@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 30
+#define BUFFER_SIZE 2000
 #endif
 
 int		ft_strcmp(const char *str1, const char *str2);
