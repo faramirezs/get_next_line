@@ -1,32 +1,8 @@
+#include "get_next_line.h"
 #include <fcntl.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "get_next_line.h"
-
-int	ft_strcmp(const char *str1, const char *str2)
-{
-	while (*str1 && *str2 && (*str1 == *str2))
-	{
-		str1++;
-		str2++;
-	}
-	return (*(unsigned char *)str1 - *(unsigned char *)str2);
-}
-
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while ((s1[i] || s2[i]) && i < n)
-	{
-		if ((unsigned char) s1[i] != (unsigned char) s2[i])
-			return ((unsigned char) s1[i] - (unsigned char) s2[i]);
-		i++;
-	}
-	return (0);
-}
+#include <unistd.h>
 
 size_t	ft_strlen(char const *s)
 {
@@ -41,14 +17,14 @@ size_t	ft_strlen(char const *s)
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*tmp;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
 	tmp = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!tmp)
-		return (free(tmp),NULL);
+		return (free(tmp), NULL);
 	while (s1[i])
 	{
 		tmp[i] = s1[i];
@@ -117,26 +93,6 @@ char	*ft_strchr(const char *s, int c)
 	if (s[i] == char_c)
 		return ((char *)&s[i]);
 	return (NULL);
-}
-char	*ft_substr_remaining(char *big_buffer, unsigned int start, size_t len)
-{
-	char	*tmp;
-	size_t	slen;
-
-	if (!big_buffer)
-		return (NULL);
-	slen = ft_strlen(big_buffer);
-	if (start >= slen)
-		return (ft_strdup(""));
-	if (len > slen - start)
-		len = slen - start;
-	tmp = malloc(sizeof(char) * (len + 1));
-	if (!tmp)
-		return (NULL);
-	ft_memcpy(tmp, &big_buffer[start], len);
-	tmp[len] = '\0';
-	free(big_buffer);
-	return (tmp);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
