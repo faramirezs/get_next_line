@@ -1,8 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alramire <alramire@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/05 11:46:20 by alramire          #+#    #+#             */
+/*   Updated: 2024/07/05 11:53:03 by alramire         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 char	*append_buffer(char *big_buffer, char *b2)
 {
@@ -22,20 +30,24 @@ char	*extract_line(char *big_buffer)
 	char	*nl_char;
 	char	*line;
 
-	if (!big_buffer)
+	if (!big_buffer[0])
 		return (NULL);
-	if (ft_strchr(big_buffer, '\n'))
+	nl_char = ft_strchr(big_buffer, '\n');
+	if (nl_char)
 	{
-		nl_char = ft_strchr(big_buffer, '\n');
-		line = ft_substr(big_buffer, 0, nl_char - big_buffer);
-		if (line == NULL)
+		line = ft_substr(big_buffer, 0, nl_char - big_buffer + 1);
+		if (!line)
 		{
 			return (NULL);
 		}
 	}
 	else
 	{
-		return (NULL);
+		line = ft_strdup(big_buffer);
+		if (!line)
+		{
+			return (NULL);
+		}
 	}
 	return (line);
 }

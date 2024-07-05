@@ -1,8 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alramire <alramire@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/05 11:46:04 by alramire          #+#    #+#             */
+/*   Updated: 2024/07/05 11:46:11 by alramire         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 size_t	ft_strlen(char const *s)
 {
@@ -121,7 +129,7 @@ void	*ft_calloc(size_t count, size_t size)
 
 	i = 0;
 	tmp = malloc(size * count);
-	if (tmp == NULL)
+	if (!tmp)
 		return (NULL);
 	while (i < size * count)
 	{
